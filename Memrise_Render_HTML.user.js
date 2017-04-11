@@ -4,7 +4,7 @@
 // @description    Render html for words in test screens
 // @match          https://www.memrise.com/course/*/garden/*
 // @match          https://www.memrise.com/garden/review/*
-// @version        0.0.1
+// @version        0.0.2
 // @updateURL      https://github.com/cooljingle/memrise-render-html/raw/master/Memrise_Render_HTML.user.js
 // @downloadURL    https://github.com/cooljingle/memrise-render-html/raw/master/Memrise_Render_HTML.user.js
 // @grant          none
@@ -18,7 +18,9 @@ $(document).ready(function() {
                 var cached_function = MEMRISE.garden.boxes.activate_box;
                 return function() {
                     var result = cached_function.apply(this, arguments);
-                    $('.qquestion, .primary-value').html(function(){return $.parseHTML($(this).text());});
+                    $('.qquestion, .primary-value')
+                        .filter(function(i, e){return $(e).text() === _.unescape($(e).html());}) //only elements without rendered html
+                        .html(function(){return $.parseHTML($(this).text());});
                     return result;
                 };
             }());
